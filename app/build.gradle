@@ -1,0 +1,107 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+}
+
+android {
+    compileSdk androidCompileSdk
+
+    defaultConfig {
+        applicationId "com.gavin.octopus"
+        minSdk androidMinSdk
+        targetSdk androidTargetSdk
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        vectorDrawables {
+            useSupportLibrary true
+        }
+    }
+
+    buildTypes {
+        debug {
+            ext.enableCrashlytics = false
+        }
+
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    flavorDimensions 'module'
+    productFlavors {
+        full {
+            resValue("string", "app_name", "Octopus")
+            dimension "module"
+        }
+
+        demo {
+            dimension "module"
+            resValue("string", "app_name", "OctopusDemo")
+            applicationIdSuffix '.demo'
+        }
+
+        videoDetail{
+            dimension "module"
+            resValue("string", "app_name", "OctopusVideoDetail")
+            applicationIdSuffix '.videoDetail'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+        useIR = true
+    }
+
+    buildFeatures {
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion compose_version
+    }
+
+    packagingOptions {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
+    }
+}
+
+dependencies {
+
+//    compileOnly project(':modules:video-detail')
+
+//    videoDetailImplementation project(':modules:video-detail')
+//    demoImplementation project(':modules:demo')
+
+    implementation project(':modules:video-detail')
+    implementation project(':modules:demo')
+
+    implementation project(':common')
+
+    implementation androidx.core
+    implementation androidx.appcompat
+    implementation androidx.compose_ui
+    implementation androidx.compose_meterial
+    implementation androidx.compose_ui_tooling_preview
+    implementation androidx.lifecycle
+    implementation androidx.activity_compose
+
+    implementation google.material
+
+    testImplementation tests.junit
+    androidTestImplementation tests.junit_ext
+    androidTestImplementation tests.espresso
+    androidTestImplementation tests.compose_test_juint4
+
+    debugImplementation androidx.compose_ui_tooling
+}
