@@ -1,0 +1,37 @@
+/**
+ * 第三方库的编译配置
+ */
+
+allprojects {
+    afterEvaluate {
+        if (project.plugins.hasPlugin('com.android.library')) {
+            android {
+                defaultConfig {
+                    javaCompileOptions {
+                        annotationProcessorOptions {
+                            arguments = [AROUTER_MODULE_NAME: project.getName()]
+                        }
+                    }
+                }
+
+                dependencies {
+//                    annotationProcessor third_libs.arouter_compiler
+                }
+            }
+        }
+
+        if (project.plugins.hasPlugin('com.android.library') || project.plugins.hasPlugin('com.android.application')) {
+            if(project.name == 'app' || project.path.contains(':module')){
+                android {
+                    defaultConfig {
+                        javaCompileOptions {
+                            annotationProcessorOptions {
+                                arguments = [AROUTER_MODULE_NAME: project.getName()]
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -8,6 +8,7 @@ dependencyResolutionManagement {
 }
 rootProject.name = "octopus"
 include ':app'
-include ':modules:video-detail'
-include ':modules:demo'
+include ':launcher:video-detail'
+include ':launcher:demo'
+include ':framework'
 include ':common'

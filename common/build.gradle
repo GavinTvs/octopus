@@ -5,34 +5,17 @@ plugins {
 
 android {
     compileSdk androidCompileSdk
-
     defaultConfig {
         minSdk androidMinSdk
         targetSdk androidTargetSdk
-        versionCode 20000
-        versionName "2.0.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
     }
 }
 
 dependencies {
+    testImplementation tests.junit
 
-    api androidx.core
-    api androidx.appcompat
-    api androidx.compose_ui
-    api androidx.compose_meterial
-    api androidx.compose_ui_tooling_preview
-    api androidx.lifecycle
-    api androidx.activity_compose
-
-    api google.material
+    api third_libs.arouter
+    implementation project(":framework")
 }

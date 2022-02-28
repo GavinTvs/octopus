@@ -9,8 +9,8 @@ android {
     defaultConfig {
         minSdk androidMinSdk
         targetSdk androidTargetSdk
-        versionCode 1
-        versionName "1.0"
+        versionCode 20000
+        versionName "2.0.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -26,15 +26,18 @@ android {
 
 dependencies {
 
-    implementation androidx.core
-    implementation androidx.appcompat
-    implementation androidx.compose_ui
-    implementation androidx.compose_meterial
-    implementation androidx.compose_ui_tooling_preview
-    implementation androidx.lifecycle
-    implementation androidx.activity_compose
+    api android_libs.core
+    api android_libs.appcompat
+    api android_libs.compose_ui
+    api android_libs.compose_meterial
+    api android_libs.compose_ui_tooling_preview
+    api android_libs.lifecycle
+    api android_libs.activity_compose
 
-    implementation google.material
+    testImplementation tests.junit
+    androidTestApi tests.junit_ext
+    androidTestApi tests.espresso
+    androidTestApi tests.compose_test_juint4
 
-    debugImplementation androidx.compose_ui_tooling
+    api google.material
 }

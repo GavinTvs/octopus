@@ -11,22 +11,22 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.ShoppingCart
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import com.gavin.common.utils.printLog
 import com.gavin.video_detail.player.PlayerView
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -59,7 +59,10 @@ fun VideoDetailScreen() {
                 val newOffset = playerOffsetHeightPx.value + delta
                 playerOffsetHeightPx.value = newOffset.coerceIn(-playerViewHeightPx, 0f)
                 nestedScrollFoldRatio.value = playerOffsetHeightPx.value / playerViewHeightPx
-                return if (playerOffsetHeightPx.value.roundToInt() >= playerViewHeightPx) Offset.Zero else Offset(0f, delta)
+                printLog("nestedScrollFoldRatio = $nestedScrollFoldRatio")
+                val offset = if (playerOffsetHeightPx.value.roundToInt() >= playerViewHeightPx) Offset.Zero else Offset(0f, delta)
+                printLog("offset.y = ${offset.y}")
+                return Offset.Zero
             }
         }
     }
@@ -69,6 +72,9 @@ fun VideoDetailScreen() {
             .fillMaxHeight()
             .fillMaxWidth()
             .nestedScroll(nestedScrollConnection)
+            .onGloballyPositioned {
+
+            }
     ) {
 
         Column(
@@ -110,7 +116,6 @@ fun VideoDetailScreen() {
                             selected = index == pagerState.currentPage,
                             onClick = {
                                 coroutineScope.launch {
-//                                pagerState.animateScrollToPage(index)
                                     pagerState.scrollToPage(index)
                                 }
                             },
@@ -134,13 +139,7 @@ fun VideoDetailScreen() {
                 count = 3,
                 state = pagerState,
                 modifier = Modifier
-                    .weight(1f)
-                    .offset {
-                        IntOffset(
-                            0,
-                            (playerViewHeightPx * nestedScrollFoldRatio.value).roundToInt()
-                        )
-                    },
+                    .weight(1f),
             ) {
                 DetailIntroView(viewModel.tabData[pagerState.currentPage])
             }
@@ -150,12 +149,7 @@ fun VideoDetailScreen() {
         TopAppBar(
             modifier = Modifier
                 .height(50.dp)
-                .offset {
-                    IntOffset(
-                        x = 0,
-                        y = -50.dp.roundToPx() + (50.dp.roundToPx() * nestedScrollFoldRatio.value).roundToInt()
-                    )
-                },
+                .alpha(1 - nestedScrollFoldRatio.value),
             title = { Text("红小豆") },
         )
     }

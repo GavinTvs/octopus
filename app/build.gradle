@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -31,23 +32,33 @@ android {
         }
     }
 
-    flavorDimensions 'module'
+    flavorDimensions 'launch'
     productFlavors {
+        //完整版
         full {
+            dimension "launch"
             resValue("string", "app_name", "Octopus")
-            dimension "module"
         }
 
         demo {
-            dimension "module"
+            dimension "launch"
             resValue("string", "app_name", "OctopusDemo")
             applicationIdSuffix '.demo'
         }
 
-        videoDetail{
-            dimension "module"
+        videoDetail {
+            dimension "launch"
             resValue("string", "app_name", "OctopusVideoDetail")
             applicationIdSuffix '.videoDetail'
+        }
+    }
+
+    sourceSets {
+        ['demo', 'videoDetail'].each { b ->
+            "$b" {
+                manifest.srcFile 'src/launcher/AndroidManifest.xml'
+                java.srcDirs += 'src/launcher/java'
+            }
         }
     }
 
@@ -78,30 +89,19 @@ android {
 
 dependencies {
 
-//    compileOnly project(':modules:video-detail')
+    videoDetailImplementation project(':launcher:video-detail')
+    demoImplementation project(':launcher:demo')
 
-//    videoDetailImplementation project(':modules:video-detail')
-//    demoImplementation project(':modules:demo')
+    fullImplementation project(':launcher:video-detail')
 
-    implementation project(':modules:video-detail')
-    implementation project(':modules:demo')
-
+    implementation project(':framework')
     implementation project(':common')
-
-    implementation androidx.core
-    implementation androidx.appcompat
-    implementation androidx.compose_ui
-    implementation androidx.compose_meterial
-    implementation androidx.compose_ui_tooling_preview
-    implementation androidx.lifecycle
-    implementation androidx.activity_compose
 
     implementation google.material
 
-    testImplementation tests.junit
-    androidTestImplementation tests.junit_ext
-    androidTestImplementation tests.espresso
-    androidTestImplementation tests.compose_test_juint4
+    debugImplementation android_libs.compose_ui_tooling
 
-    debugImplementation androidx.compose_ui_tooling
+    testImplementation tests.junit
+
+    kapt third_libs.arouter_compiler
 }

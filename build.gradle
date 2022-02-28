@@ -1,4 +1,4 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+// Top-level build file where you can add configuration options commonxxx to all sub-projects/modules.
 apply from: './dependencies.gradle'
 
 buildscript {
@@ -16,9 +16,19 @@ allprojects {
     afterEvaluate {
         if (project.plugins.hasPlugin('com.android.library')) {
             android {
+                compileSdk compileSdk ?: androidCompileSdk
                 defaultConfig {
+                    minSdk minSdk ?: androidMinSdk
+                    targetSdk targetSdk ?: androidTargetSdk
                     buildConfigField 'String', 'VERSION_NAME', "\"${versionName ?: '1.0.0'}\""
                     buildConfigField 'int', 'VERSION_CODE', "${versionCode ?: 10000}"
+                }
+
+                buildTypes {
+                    release {
+                        minifyEnabled false
+                        proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+                    }
                 }
 
                 compileOptions {
@@ -41,6 +51,8 @@ allprojects {
         }
     }
 }
+
+apply from: './build_lib.gradle'
 
 task clean(type: Delete) {
     delete rootProject.buildDir
