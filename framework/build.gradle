@@ -26,6 +26,13 @@ android {
 
 dependencies {
 
+    testImplementation tests.junit
+    androidTestApi tests.junit_ext
+    androidTestApi tests.espresso
+    androidTestApi tests.compose_test_juint4
+
+    debugApi android_libs.compose_ui_tooling
+
     api android_libs.core
     api android_libs.appcompat
     api android_libs.compose_ui
@@ -33,11 +40,7 @@ dependencies {
     api android_libs.compose_ui_tooling_preview
     api android_libs.lifecycle
     api android_libs.activity_compose
-
-    testImplementation tests.junit
-    androidTestApi tests.junit_ext
-    androidTestApi tests.espresso
-    androidTestApi tests.compose_test_juint4
+    api android_libs.coroutines
 
     api google.material
 }
